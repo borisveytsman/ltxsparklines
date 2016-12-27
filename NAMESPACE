@@ -1,0 +1,2 @@
+exportPattern("^[[:alpha:]]+")
+importFrom("stats", "complete.cases", "is.ts", "time")
