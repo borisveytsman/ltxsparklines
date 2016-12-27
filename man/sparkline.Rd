@@ -7,7 +7,7 @@ Create a Sparkline
 The function creates a TeX expression for a sparkline from the data supplied.
 }
 \usage{
-sparkline(x = NULL, y = NULL, xspikes = NULL, yspikes = NULL, xdots = NULL, ydots = NULL, colordots = NULL, width = getOption("ltxsparklines.width"), rectangle = c(NA, NA), xlim = c(NA, NA), ylim = c(NA, NA), na.rm = getOption("ltxsparklines.na.rm"), bottomline = getOption("ltxsparklines.bottomline"), bottomlinelength = NA, startdotcolor = getOption("ltxsparklines.startdotcolor"), enddotcolor = getOption("ltxsparklines.enddotcolor"))
+sparkline(x = NULL, y = NULL, xspikes = NULL, yspikes = NULL, xdots = NULL, ydots = NULL, dotcolor = NULL, width = getOption("ltxsparklines.width"), rectangle = c(NA, NA), xlim = c(NA, NA), ylim = c(NA, NA), na.rm = getOption("ltxsparklines.na.rm"), bottomline = getOption("ltxsparklines.bottomline"), bottomlinelength = NA, startdotcolor = getOption("ltxsparklines.startdotcolor"), enddotcolor = getOption("ltxsparklines.enddotcolor"))
 }
 \arguments{
   \item{x}{
@@ -44,19 +44,21 @@ sparkline(x = NULL, y = NULL, xspikes = NULL, yspikes = NULL, xdots = NULL, ydot
     \code{xdots} and \code{ydots} are present, they are x and y
     coordinates for dots.  If only one is present, it is interpreted as
     \code{x} above with one addition: if \code{xdots} is a data frame,
-    and has three or more columns, and \code{colordots} is not set,
+    and has three or more columns, and \code{dotcolor} is not set,
     the third column is interpreted as
-    the dot color.  Note that the color of dots must be set either by
-    this method, or with \code{colordots} argument.
+    the dot color.  
 }
   \item{ydots}{
     See \code{ydots} above
 }
-  \item{colordots}{
+  \item{dotcolor}{
     The color of dots as a LaTeX color.  A vector like
     \code{c('red', 'blue', 'green')}.  If it is larger than the number
     of dots, it will be truncated.  If it is shorted than the number of
     dots, it will be recycled.
+
+    If it is not set, and data do not provide it,
+    \code{option('ltxsparklines.defaultdotcolor')} is used.
 }
   \item{width}{
     The width of the sparline in \code{ex} of the current font.  By

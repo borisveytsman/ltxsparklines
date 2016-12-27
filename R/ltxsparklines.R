@@ -70,19 +70,23 @@
     if (nrow(df) <2) {
         return('')
     }
-    paste0("\\spark ",
+    paste0("\\\\spark ",
            paste0(as.numeric(t(as.matrix(df))),
                   collapse = ' '),
-           " /\n")
+           " /\\\n")
 }
 
 .plot_dots <- function (df) {
+    if (ncol(df) < 3) {
+        df[,3] <- rep(getOption('ltxsparklines.defaultdotcolor'),
+                      nrow(df))
+    }
     df <- df[complete.cases(df),]
     if (!nrow(df) || ncol(df)<3) {
         return ("")
     }
     dots <- sapply(1:nrow(df), function(i) {
-        paste("\\sparkdot", df[i,1], df[i,2], df[i,3], "\n",
+        paste("\\\\sparkdot", df[i,1], df[i,2], df[i,3], "\\\n",
               sep=" ")})
     paste0(dots, collapse="")
 }
@@ -93,7 +97,7 @@
         return ("")
     }
     spikes <- sapply(1:nrow(df), function(i) {
-        paste("\\sparkspike", df[i,1], df[i,2], "\n",
+        paste("\\\\sparkspike", df[i,1], df[i,2], "\\\n",
               sep=" ")})
     paste0(spikes, collapse="")
 }
@@ -106,7 +110,8 @@
         ltxsparklines.na.rm = TRUE,
         ltxsparklines.bottomline = FALSE,
         ltxsparklines.startdotcolor = NA,
-        ltxsparklines.enddotcolor = NA)
+        ltxsparklines.enddotcolor = NA,
+        ltxsparklines.defaultdotcolor='blue')
     new.opts <-  !(names (opts) %in% names(options()))
     if (any(new.opts)) {
         options(opts[new.opts])
@@ -118,7 +123,7 @@
 # The main function
 sparkline <- function(x=NULL, y=NULL,
                       xspikes=NULL, yspikes=NULL,
-                      xdots=NULL, ydots=NULL,colordots=NULL,
+                      xdots=NULL, ydots=NULL,dotcolor=NULL,
                       width=getOption('ltxsparklines.width'),
                       rectangle=c(NA,NA),
                       xlim=c(NA,NA),
@@ -133,14 +138,14 @@ sparkline <- function(x=NULL, y=NULL,
         width=10
     }
 
-    result <- paste0("\\begin{sparkline}{", width, "}\n");
+    result <- paste0("\\\\begin{sparkline}{", width, "}\\\n");
     line <- .process_input(x,y, name='line')[,c(1,2)]
-    if (na.rm) {
+    if (na.rm && !is.null(line) && is.data.frame(line)) {
         line <- line[complete.cases(line),]
     }
     spikes <- .process_input(xspikes, yspikes, name='spikes')[,c(1,2)]
     dots <- .process_input(xdots, ydots, name='dots',
-                           color=colordots)
+                           color=dotcolor)
 
     # Calculating ranges
     if (is.na(xlim[1])) {
@@ -174,19 +179,19 @@ sparkline <- function(x=NULL, y=NULL,
 
     
     if (!is.na(rectangle[1]) && !is.na(rectangle[2])) {
-        result <- paste0(result, "\\sparkrectangle ",
+        result <- paste0(result, "\\\\sparkrectangle ",
                          rectangle[1], " ",
-                         rectangle[2], "\n")
+                         rectangle[2], "\\\n")
     }
 
-    if (!is.null(spikes) && nrow(spikes)) {
+    if (!is.null(spikes) && is.data.frame(spikes) && nrow(spikes)) {
         result <- paste0(result,
                          paste0(.plot_spikes(spikes),
                                 collapse=""))
     }
 
         
-    if (!is.null(line) && nrow(line)) {
+    if (!is.null(line) && is.data.frame(line) && nrow(line)) {
         line.splits <- c(1,which(!complete.cases(line)),nrow(line))
         sparks <- sapply(1:(length(line.splits)-1), function (i) {
             start <- line.splits[i]
@@ -214,7 +219,7 @@ sparkline <- function(x=NULL, y=NULL,
 
     }
 
-    if (!is.null(dots) && nrow(dots)) {
+    if (!is.null(dots) && is.data.frame(dots) && nrow(dots)) {
         result <- paste0(result,
                          paste0(.plot_dots(dots),
                                 collapse=""))
@@ -224,14 +229,12 @@ sparkline <- function(x=NULL, y=NULL,
         if(is.na(bottomlinelength)) {
             bottomlinelength=1
         }
-        result <- paste0(result,"\\sparkbottomline[",
+        result <- paste0(result,"\\\\sparkbottomline[",
                          bottomlinelength,
-                         "]\n");
+                         "]\\\n");
     }
-    result <- paste0(result,"\\end{sparkline}\n");
+    result <- paste0(result,"\\\\end{sparkline}%\\\n");
     return(result)
 }
-                      
-
-                      
+                                            
                       

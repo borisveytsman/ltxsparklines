@@ -1,0 +1,48 @@
+\documentclass{article}
+\usepackage{sparklines}
+\begin{document}
+\title{Examples for \texttt{ltxsparklines} package}
+\author{Boris Veytsman}
+\date{December 27, 2016}
+\maketitle
+
+<<>>=
+library(ltxsparklines)
+@ 
+
+\iffalse
+<<>>=
+pr <- function (string) paste0("\\\\texttt{",string,"}")
+ev <- function (string) eval(parse(text=string))
+twovect <- "sparkline(x=c(1,4,8,10), y=c(5,6,12,3), enddotcolor='red')"
+onevect <- "sparkline(c(1,8,-5,10), startdotcolor='green', bottomline=TRUE)"
+plot_matrix <- "mat <- matrix(c(1, 2, 3, 4, 5, 17, 10, 12, 11, 10), ncol=2, byrow=F); sparkline(mat, rectangle=c(10,16), startdotcolor='blue')"
+plot_ts <- "sparkline(window(Nile, 1880, 1890), rectangle=quantile(Nile, c(0.25, 0.75)))"
+rm_t <- "sparkline(c(3,5,4,NA,12,9), na.rm=TRUE)"
+rm_f <- "sparkline(c(3,5,4,NA,12,9), na.rm=FALSE)"
+spikes <- 'sparkline(yspikes=c(3,5,4,12,9,20,17,14,5))'
+dots <- 'sparkline(c(3,5,4,12,9), xdots=2, ydots=5, dotcolor="red")'
+@ 
+\fi
+\raggedright
+\begin{description}
+\item[A pair of vectors:] the command \Sexpr{pr(twovect)} produces
+  \Sexpr{ev(twovect)}.
+\item[One vector:] the command \Sexpr{pr(onevect)} produces
+  \Sexpr{ev(onevect)}.
+\item[A matrix:] the command \Sexpr{pr(plot_matrix)} produces
+  \Sexpr{ev(plot_matrix)}.
+\item[A time series:] the command \Sexpr{pr(plot_ts)} produces
+  \Sexpr{ev(plot_ts)} (note the quartile rectangle for the whole set).
+\item[Dealing with NA:] Compare \Sexpr{pr(rm_t)} and
+  \Sexpr{pr(rm_f)}: the first gives \Sexpr{ev(rm_t)}, the second
+  gives \Sexpr{ev(rm_f)}.
+\item[Spikes:] the command \Sexpr{pr(spikes)} produces
+  \Sexpr{ev(spikes)}.
+\item[Dots inside sparklines:] the command \Sexpr{pr(dots)} produces
+  \Sexpr{ev(dots)}.
+\end{description}
+
+
+
+\end{document}
