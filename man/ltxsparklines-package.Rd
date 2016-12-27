@@ -26,9 +26,9 @@ outputs LaTeX code compatible with LaTeX package \code{sparklines}
 (Andreas Loeffer and Dan Luecking, http://www.ctan.org/pkg/sparklines). 
 }
 \author{
-\packageAuthor{ltxsparklines}
+Boris Veytsman
 
-Maintainer: \packageMaintainer{ltxsparklines}
+Maintainer: <borisv@lk.net> 
 }
 \references{
   Andreas Loeffer and Dan Luecking, Sparklines, 2014,

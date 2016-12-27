@@ -125,7 +125,7 @@ sparkline(x = NULL, y = NULL, xspikes = NULL, yspikes = NULL, xdots = NULL, ydot
   \preformatted{Nile level changed over the years: \Sexpr{sparkline(Nile)}}.
 }
 \author{
-\packageAuthor{ltxsparklines}
+Boris Veytsman
 }
 \examples{
 \dontrun{
