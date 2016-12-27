@@ -7,7 +7,16 @@ Create a Sparkline
 The function creates a TeX expression for a sparkline from the data supplied.
 }
 \usage{
-sparkline(x = NULL, y = NULL, xspikes = NULL, yspikes = NULL, xdots = NULL, ydots = NULL, dotcolor = NULL, width = getOption("ltxsparklines.width"), rectangle = c(NA, NA), xlim = c(NA, NA), ylim = c(NA, NA), na.rm = getOption("ltxsparklines.na.rm"), bottomline = getOption("ltxsparklines.bottomline"), bottomlinelength = NA, startdotcolor = getOption("ltxsparklines.startdotcolor"), enddotcolor = getOption("ltxsparklines.enddotcolor"))
+sparkline(x = NULL, y = NULL, xspikes = NULL, yspikes = NULL,
+          xdots = NULL, ydots = NULL, dotcolor = NULL,
+          width = getOption("ltxsparklines.width"),
+          rectangle = c(NA, NA),
+          xlim = c(NA, NA), ylim = c(NA, NA),
+          na.rm = getOption("ltxsparklines.na.rm"),
+          bottomline = getOption("ltxsparklines.bottomline"),
+          bottomlinelength = NA,
+          startdotcolor = getOption("ltxsparklines.startdotcolor"),
+          enddotcolor = getOption("ltxsparklines.enddotcolor"))
 }
 \arguments{
   \item{x}{

@@ -1,3 +1,7 @@
+%\VignetteIndexEntry{sparklines}
+%\VignetteIndexEntry{sparkline}
+%\VignetteIndexEntry{LaTeX}
+%\VignetteIndexEntry{ltxsparklines}
 \documentclass{article}
 \usepackage{sparklines}
 \begin{document}
