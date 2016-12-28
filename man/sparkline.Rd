@@ -16,7 +16,8 @@ sparkline(x = NULL, y = NULL, xspikes = NULL, yspikes = NULL,
           bottomline = getOption("ltxsparklines.bottomline"),
           bottomlinelength = NA,
           startdotcolor = getOption("ltxsparklines.startdotcolor"),
-          enddotcolor = getOption("ltxsparklines.enddotcolor"))
+          enddotcolor = getOption("ltxsparklines.enddotcolor"),
+          output = getOption('ltxsparklines.output'))
 }
 \arguments{
   \item{x}{
@@ -117,7 +118,16 @@ sparkline(x = NULL, y = NULL, xspikes = NULL, yspikes = NULL,
     \code{NA} (the default), no dot is drawn. To
     change the default, use 
     \code{option(ltxsparklines.enddotcolor=...)}. 
-}
+  }
+  \item{output}{
+    The format of the output.  \code{Sweave} uses special
+    processing for inline (\code{Sexpr}) code.  Thus you need to set
+    \code{output} to \code{inlineSweave} if you use \code{Sweave}
+    and \code{Sexpr}.  If you use  \code{knitr} or a \code{Sweave}
+    chunk, set \code{output} to \code{knitr}.  This is the default, to
+    change it, use \code{option(ltxsparklines.output='inlineSweave')}.
+    See Details below.
+  }
 }
 \details{  
   Most of the parameters of the sparkline are defined by the TeX code.
@@ -126,7 +136,13 @@ sparkline(x = NULL, y = NULL, xspikes = NULL, yspikes = NULL,
 
   \preformatted{\definecolor{startdot}{named}{red}}
 
-  and then use it like \code{sparkline(Nile, startdotcolor='startdot')}
+  and then use it like \code{sparkline(Nile, startdotcolor='startdot')}.
+
+  You should use LaTeX command to change sparkline parameters, for
+  example, \preformatted{\setlength\sparklinethickness{0.3pt}}.
+
+  The output of \code{sparkline} is also a TeX command, so you want to
+  put it inside \code{Sexpr} or a code chunk 
 }
 \value{
   The function returns a string executable by TeX, to be used in
