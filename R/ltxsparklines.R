@@ -78,7 +78,7 @@
 
 .plot_dots <- function (df) {
     if (ncol(df) < 3) {
-        df[,3] <- rep(getOption('ltxsparklines.defaultdotcolor'),
+        df[,3] <- rep(getOption('ltxsparklines.dotcolor'),
                       nrow(df))
     }
     df <- df[complete.cases(df),]
@@ -111,7 +111,7 @@
         ltxsparklines.bottomline = FALSE,
         ltxsparklines.startdotcolor = NA,
         ltxsparklines.enddotcolor = NA,
-        ltxsparklines.defaultdotcolor='blue',
+        ltxsparklines.dotcolor='blue',
         ltxsparklines.output='knitr')
     new.opts <-  !(names (opts) %in% names(options()))
     if (any(new.opts)) {

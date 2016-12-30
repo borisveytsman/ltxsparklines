@@ -4,15 +4,98 @@
 %\VignetteIndexEntry{ltxsparklines}
 \documentclass{article}
 \usepackage{sparklines}
+\usepackage{natbib}
+\usepackage[colorlinks]{hyperref}
+\usepackage{booktabs}
 \begin{document}
 \title{Examples for \texttt{ltxsparklines} package}
 \author{Boris Veytsman}
 \date{December 27, 2016}
 \maketitle
+\tableofcontents
+\section{Setting up}
+\label{sec:setup}
 
+
+
+The package \textsl{ltxsparklines} uses \LaTeX\ package
+\textsl{sparklines} \citep{Loeffler14} for drawing sparklines in \TeX\
+documents: probably prepared with \textsl{Sweave} or \textsl{knitr}
+(but you are, of course, may choose other methods to generate \TeX\
+documents).  Accordingly, many parameters that determine how do
+sparklines look are defined in the \TeX\ file rather than in
+\textsl{R}.  
+
+Here are some global parameters with the values chosen for this
+document:
+\begin{verbatim}
+% The height of the sparklines in ex units
+\renewcommand\sparklineheight{1.75} 
+% The line width
+\setlength\sparklinethickness{0.4pt}
+% The color of the sparkline
+\definecolor{sparklinecolor}{named}{blue}
+% The color of the sparkine rectangle when present
+\definecolor{sparkrectanglecolor}{gray}{0.8}
+% The dot width
+\setlength\sparkdotwidth{2pt}
+% The color of the spikes
+\definecolor{sparkspikecolor}{named}{red}
+% The color of the bottom line when present
+\definecolor{bottomlinecolor}{gray}{0.2}
+\end{verbatim}
+
+% The height of the sparklines in ex units
+\renewcommand\sparklineheight{1.75} 
+% The line width
+\setlength\sparklinethickness{0.4pt}
+% The color of the sparkline
+\definecolor{sparklinecolor}{named}{blue}
+% The color of the sparkine rectangle when present
+\definecolor{sparkrectanglecolor}{gray}{0.8}
+% The dot width
+\setlength\sparkdotwidth{2pt}
+% The color of the spikes
+\definecolor{sparkspikecolor}{named}{red}
+% The color of the bottom line when present
+\definecolor{bottomlinecolor}{gray}{0.2}
+
+
+Now we call the library and setting the options.
 <<>>=
 library(ltxsparklines)
-options(ltxsparklines.output='inlineSweave') # Comment out if using knitr
+@ 
+
+The most important option is \texttt{ltxsparklines.output}.  The
+package produces a string to be included in the \TeX\ file.  Being a
+\TeX\ command, the string contains many backslashes.  Unfortunately
+the ways \textsl{knitr} and \textsl{Sweave} treat backslashes are
+different.  Moreover, \textsl{Sweave} uses different techniques in
+inline expressions (those within \texttt{\textbackslash Sexpr}) and
+chunks created with \texttt{results=tex} option.  To make the long
+story short,
+\begin{enumerate}
+\item Use \texttt{output='inlineSweave'} for \textsl{Sweave}
+  \texttt{\textbackslash Sexpr}.
+\item Use \texttt{output='knitr'} everywhere else, \emph{including
+    \textsl{Sweave} chunks!}
+\end{enumerate}
+This document was created in \textsl{Sweave}, since the line 
+<<>>=
+options(ltxsparklines.output='inlineSweave') # Comment out 
+                                             # if using knitr
+@ 
+
+The other options are mostly self-explanatory; try
+\texttt{help(ltxsparklines)} for more details:
+<<>>=
+options(
+    ltxsparklines.width = 10,
+    ltxsparklines.na.rm = TRUE,
+    ltxsparklines.bottomline = FALSE,
+    ltxsparklines.startdotcolor = NA,
+    ltxsparklines.enddotcolor = NA,
+    ltxsparklines.dotcolor='blue')
 @ 
 
 \iffalse
@@ -26,50 +109,136 @@ pr <- function (string)
 ev <- function (string) eval(parse(text=string))
 twovect <- "sparkline(x=c(1,4,8,10), y=c(5,6,12,3), 
             enddotcolor='red')"
+twovectspikes <- "sparkline(xspikes=c(1,4,8,10), yspikes=c(5,6,12,3),
+                            width=3)"
+twovectdots <- "sparkline(xdots =c(1,4,8,10), ydots=c(5,6,12,3), 
+                           dotcolor=c('green', 'red'))"
+twovectdotsparks <- "sparkline(x =c(1,4,8,10), y=c(5,6,12,3), 
+                           xdots=c(1,4,8,10), ydots=c(5,6,12,3), 
+                           dotcolor=c('green', 'red'))"
+carsplot <- "sparkline(yspikes=cars, width=20)"
+carsplot_reverse <- "sparkline(yspikes=cars[,c(2,1)], width=20)"
 onevect <- "sparkline(c(1,8,-5,10), startdotcolor='green', 
             bottomline=TRUE)"
 plot_matrix <- "mat <- matrix(c(1, 2, 3, 4, 5, 17, 10, 12, 11, 10), 
                 ncol=2, byrow=F); 
                 sparkline(mat, rectangle=c(10,16), 
                 startdotcolor='blue')"
-plot_ts <- "sparkline(window(Nile, 1880, 1890), 
-                      rectangle=quantile(Nile, c(0.25, 0.75)))"
+plot_Nile <- "sparkline(Nile, width=30)"
 rm_t <- "sparkline(c(3,5,4,NA,12,9), na.rm=TRUE)"
 rm_f <- "sparkline(c(3,5,4,NA,12,9), na.rm=FALSE)"
-spikes <- 'sparkline(yspikes=c(3,5,4,12,9,20,17,14,5))'
-dots <- 'sparkline(c(3,5,4,12,9), xdots=2, ydots=5, 
-                   dotcolor="red")'
 @ 
 \fi
 
+\section{Some simple examples}
+\label{sec:examples}
+
+The package can take quite versatile input data.  You can give it two
+vectors, one for $x$, another for $y$ coordinates of the sparkline:
+\Sexpr{pr(twovect)} \Sexpr{ev(twovect)}.  
+
+If you use \texttt{xspikes} and \texttt{yspikes} instead, you will
+have a small bar chart (or \emph{spike chart}):
+\Sexpr{pr(twovectspikes)} \Sexpr{ev(twovectspikes)}. 
+
+You can even make a sort of a scatter plot with dots:
+\Sexpr{pr(twovectdots)}\space\space \Sexpr{ev(twovectdots)}.  In most
+cases, however, you probably want to combine dots and lines:
+\Sexpr{pr(twovectdotsparks)}\space\space \Sexpr{ev(twovectdotsparks)}.
+
+Instead of a pair of vectors you can use a matrix; in this case $x$
+and $y$ are assumed to be the \emph{columns}: \Sexpr{pr(plot_matrix)}
+\Sexpr{ev(plot_matrix)}.  You can also try a data frame.  Here is the
+famous \emph{cars} data set: \Sexpr{pr(carsplot)}
+\Sexpr{ev(carsplot)}.  This plot shows stopping distance vs. speed; to
+reverse the axis do just \Sexpr{pr(carsplot_reverse)}
+\Sexpr{ev(carsplot_reverse)}.
+
+If you have just one vector, it is assumed to be the $y$ coordinates,
+and the $x$ coordinates are $1$, $2$, \ldots: \Sexpr{pr(onevect)}
+\Sexpr{ev(onevect)}.  
+
+If you have a time series, it will be recognized as well: here are the
+measurements of the annual flow of the river Nile at Aswan (formerly
+`Assuan'), 1871-1970:  \Sexpr{pr(plot_Nile)} \Sexpr{ev(plot_Nile)}.  
+
+The parameter \texttt{na.rm} selects whether to remove the \texttt{NA}
+values and connect the data over them: compare \Sexpr{pr(rm_t)}
+\Sexpr{ev(rm_t)}, and the similar command  with \texttt{na.rm} set to
+\texttt{FALSE}
+\Sexpr{pr(rm_f)} \Sexpr{ev(rm_f)}.
+
+\section{A more complex example}
+\label{sec:complex_example}
+
+The Nile data in the previous section show a very long graph.  It is
+interesting to look how did the flow change from a decade to decade.
+To do this we will make a table with decades in one column and
+sparklines in another.  To compare the data, we will use the same
+vertical limits and plot a rectangle showing the span between 25\% and
+75\% of the total data (the interquartile range).  The table is
+completely constructed in an \textsl{R} chunk.  
+
+There are differences between the ways such chunks are constructed in
+\textsl{Sweave} and \textsl{knitr}: the former uses
+\verb|<<results=tex>>| chevron, while the latter uses
+\verb|<<results='asis'>>| chevron.  You may use the same chevron if
+you define \texttt{tex <- 'asis'}, but \textsl{knitr} will still issue
+warnings.  In both cases you need to set the
+output to \verb|'knitr'| to get the correct output.
+
+The construction is rather involved, so we do it step by step.
+
+We create the vector \texttt{decadeStarts} with first year of the
+decade, and store the range and interquartile range of the total:
+<<>>=
+decadeStarts <- seq(min(time(Nile)), max(time(Nile)), 
+                    by=10)
+rangeNile <- range(Nile)
+iqrNile <- quantile(Nile, c(0.25, 0.75))
+@ 
+
+The function \texttt{printDecade} outputs a line like
+\verb|1871--1880 & SPARKLINE\\|:
+<<>>=
+printDecade <- function (start) {
+    end <- start+9
+    paste0(start, "--", end, " & ",
+           sparkline(window(Nile, start, end),
+                     width=20,
+                     xlim=c(start, end),
+                     ylim=rangeNile,
+                     rectangle=iqrNile,
+                     output='knitr'),
+           "\\\\")
+}
+@ 
+
+Now we can print the table
 
 <<results=tex>>=
-# This chunk was set with <<results=tex>>=
-# Change to <<results='asis'>>= if using knitr
-cat(sparkline(c(3,5,4,12,9), xdots=2, ydots=5, 
-                   dotcolor="red", output='knitr'))
+# Table header
+result <- paste("\\begin{tabular}{ll}",
+                 "\\toprule",
+                 "Decade & Annual flow\\\\",
+                 "\\midrule",
+                 sep="\n")
+# Table body
+result <- paste(result,
+                paste(sapply(decadeStarts, printDecade),
+                      collapse="\n"),
+                sep="\n")
+# Table footer
+result <- paste(result,
+                 "\\bottomrule",
+                 "\\end{tabular}",
+                 sep="\n")
+# Printing table
+cat(result)
 @ 
 
 
-\raggedright
-\begin{description}
-\item[A pair of vectors:] the command \Sexpr{pr(twovect)} produces
-  \Sexpr{ev(twovect)}.
-\item[One vector:] the command \Sexpr{pr(onevect)} produces
-  \Sexpr{ev(onevect)}.
-\item[A matrix:] the command \Sexpr{pr(plot_matrix)} produces
-  \Sexpr{ev(plot_matrix)}.
-\item[A time series:] the command \Sexpr{pr(plot_ts)} produces
-  \Sexpr{ev(plot_ts)} (note the quartile rectangle for the whole set).
-\item[Dealing with NA:] Compare \Sexpr{pr(rm_t)} and
-  \Sexpr{pr(rm_f)}: the first gives \Sexpr{ev(rm_t)}, the second
-  gives \Sexpr{ev(rm_f)}.
-\item[Spikes:] the command \Sexpr{pr(spikes)} produces
-  \Sexpr{ev(spikes)}.
-\item[Dots inside sparklines:] the command \Sexpr{pr(dots)} produces
-  \Sexpr{ev(dots)}.
-\end{description}
-
-
+\bibliography{ltxsparklines}
+\bibliographystyle{plainnat}
 
 \end{document}
