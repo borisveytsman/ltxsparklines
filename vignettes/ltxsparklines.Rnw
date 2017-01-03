@@ -8,9 +8,10 @@
 \usepackage[colorlinks]{hyperref}
 \usepackage{booktabs}
 \begin{document}
+\sloppy
 \title{Examples for \texttt{ltxsparklines} package}
 \author{Boris Veytsman}
-\date{December 27, 2016}
+\date{January 2, 2017}
 \maketitle
 \tableofcontents
 \section{Setting up}
@@ -43,6 +44,10 @@ document:
 \definecolor{sparkspikecolor}{named}{red}
 % The color of the bottom line when present
 \definecolor{bottomlinecolor}{gray}{0.2}
+% The thickness of the bottom line
+\setlength\sparkbottomlinethickness{.2pt}
+% The clipping separation (need sparklines v1.7 or later)
+\setlength\sparklineclipsep{1pt}    
 \end{verbatim}
 
 % The height of the sparklines in ex units
@@ -59,6 +64,10 @@ document:
 \definecolor{sparkspikecolor}{named}{red}
 % The color of the bottom line when present
 \definecolor{bottomlinecolor}{gray}{0.2}
+% The thickness of the bottom line
+\setlength\sparkbottomlinethickness{.2pt}
+% The clipping separation (need sparklines v1.7 or later)
+\setlength\sparklineclipsep{1pt}    
 
 
 Now we call the library and setting the options.
@@ -91,11 +100,14 @@ The other options are mostly self-explanatory; try
 <<>>=
 options(
     ltxsparklines.width = 10,
+    ltxsparklines.clip = FALSE,
     ltxsparklines.na.rm = TRUE,
     ltxsparklines.bottomline = FALSE,
+    ltxsparklines.bottomlinex = c(NA, NA),
     ltxsparklines.startdotcolor = NA,
     ltxsparklines.enddotcolor = NA,
-    ltxsparklines.dotcolor='blue')
+    ltxsparklines.dotcolor='blue'
+    )
 @ 
 
 \iffalse
@@ -168,6 +180,78 @@ values and connect the data over them: compare \Sexpr{pr(rm_t)}
 \texttt{FALSE}
 \Sexpr{pr(rm_f)} \Sexpr{ev(rm_f)}.
 
+
+\section{Scaling and clipping}
+\label{sec:scaling}
+
+\iffalse
+<<>>=
+yrange1 <- "sparkline(c(2,4,8,12,16))"
+yrange2 <- "sparkline(c(2,4,8,12,16), ylim=c(NA,20))"
+yrange3 <- "sparkline(c(2,4,8,12,16), ylim=c(-10,20))"
+xyrange <- "sparkline(c(2,20,1,16,4), ylim=c(NA,10), xlim=c(2,5))"
+xyrange_clip <- "sparkline(c(2,20,1,16,4), ylim=c(NA,10), xlim=c(2,5),
+                           clip=TRUE)"
+@ 
+\fi
+
+When producing several sparklines, one may want to make them
+comparable.  This means that theis $x$ or $y$ ranges better be the
+same.  The options \texttt{xlim} and \texttt{ylim} can be used to set
+them.  Note that each of these options has the form \texttt{c(min,
+  max)}; if either limit is \texttt{NA}, the value is taken from the
+data.  Compare, for example, \Sexpr{pr(yrange1)} \Sexpr{ev(yrange1)}, 
+\Sexpr{pr(yrange2)} \Sexpr{ev(yrange2)}, and \Sexpr{pr(yrange3)}
+\Sexpr{ev(yrange3)}.  
+
+Note that \texttt{xlim} and \texttt{ylim} just change the scaling of
+the data, mapping it to the range of the the sparkline area.  This
+means that data outside \texttt{xlim} or \texttt{ylim} is still
+plotted, but will overlay the text around like this:
+\Sexpr{pr(xyrange)} \Sexpr{ev(xyrange)}.  Starting with the version
+v1.7 the \LaTeX\ \textsl{sparklines} package provides the option of
+clipping.  You can use it setting \texttt{clip} to \texttt{TRUE},
+either in the command itself, or globally with
+\texttt{options(ltxsparklines.clip=TRUE}.  This produces the following
+result: \Sexpr{pr(xyrange_clip)} \Sexpr{ev(xyrange_clip)}.  Note that
+clipping is done in \LaTeX\ rather than in \textsl{R}, so the
+closeness of the clipping is define by the \LaTeX\ length
+\verb|\sparklineclipsep|.  
+
+\section{Additional features}
+\label{sec:rect_bottom}
+
+\iffalse
+<<>>=
+rect1 <- "sparkline(Nile, rectangle=quantile(Nile, c(0.025, 0.975)),
+          width=30)"
+bottomline1 <- "sparkline(c(2,4,1,12,3), bottomline=TRUE)"
+bottomline2 <- "sparkline(c(2,4,1,12,3), bottomline=TRUE,
+                bottomlinelength=4)"
+bottomlinex <- "sparkline(c(2,4,1,12,3), 
+                bottomlinex=c(2,4))"
+@ 
+\fi
+
+Sometimes you may want to draw a horizontal rectangle showing, for
+example, interquartile range or 95\% interval for the data.  The
+argument \texttt{rectangle=c(min, max)} can be used for this:
+\Sexpr{pr(rect1)} \Sexpr{ev(rect1)}.  
+
+You can show the $x$ axis with the argument \texttt{bottomline=TRUE}:
+\Sexpr{pr(bottomline1)} \Sexpr{ev(bottomline1)}.  
+
+The argument \texttt{bottomlinelength} gives the length of the bottom
+line (in data coordinates) (by default, the line is drawn across the
+full rectangle):  \Sexpr{pr(bottomline2)} \Sexpr{ev(bottomline2)}.  
+
+Starting with version~1.7 of the \LaTeX\ \textsl{sparklines} package
+there is an alternative mechanism for extensible bottom lines.  The
+argument \texttt{bottomlinex}, accordingly, has two arguments, with
+the start and the end of a bottom line.  If both are not \texttt{NA},
+the bottom line will be drawn: \Sexpr{pr(bottomlinex)}
+\Sexpr{ev(bottomlinex)}.   
+
 \section{A more complex example}
 \label{sec:complex_example}
 
@@ -236,6 +320,7 @@ result <- paste(result,
 # Printing table
 cat(result)
 @ 
+
 
 
 \bibliography{ltxsparklines}

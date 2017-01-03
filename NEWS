@@ -1,0 +1,8 @@
+Version 1.1 (January 2, 2017:
+
+    Bug fixes; now the package works with knitr
+
+    Added clipping and extensible bottom line (requires LaTeX package
+    sparklines v1.7 ot later)
+
+    New detailed documentation

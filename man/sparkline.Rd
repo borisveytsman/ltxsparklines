@@ -12,9 +12,11 @@ sparkline(x = NULL, y = NULL, xspikes = NULL, yspikes = NULL,
           width = getOption("ltxsparklines.width"),
           rectangle = c(NA, NA),
           xlim = c(NA, NA), ylim = c(NA, NA),
+          clip = getOption("ltxsparklines.clip"),
           na.rm = getOption("ltxsparklines.na.rm"),
           bottomline = getOption("ltxsparklines.bottomline"),
           bottomlinelength = NA,
+          bottomlinex = getOption("ltxsparklines.bottomlinex"),
           startdotcolor = getOption("ltxsparklines.startdotcolor"),
           enddotcolor = getOption("ltxsparklines.enddotcolor"),
           output = getOption('ltxsparklines.output'))
@@ -81,12 +83,20 @@ sparkline(x = NULL, y = NULL, xspikes = NULL, yspikes = NULL,
     rectangle is drawn.
 }
   \item{xlim}{
-    A vector \code{c(min,max)} of the x range of the data.  If any of
+    A vector \code{c(min,max)} of the x range of the data mapped to the
+    c(0,1) interval.  If any of
     its components is \code{NA}, the default, the actual range is used.
 }
   \item{ylim}{
-    A vector \code{c(min,max)} of the y range of the data.  If any of
+    A vector \code{c(min,max)} of the y range of the data mapped to the
+    c(0,1) interval.  If any of
     its components is \code{NA}, the default, the actual range is used.
+}
+  \item{clip}{
+    Whether to clip the sparkline to the drawing region.  The default is
+    not clipping.  To change the default, use
+    \code{option(ltxsparklines.clip=TRUE)}.  You need LaTeX package at
+    least v1.7 for clipping.
 }
   \item{na.rm}{
     Whether to delete \code{NA} lines from the spark data.  If
@@ -106,6 +116,12 @@ sparkline(x = NULL, y = NULL, xspikes = NULL, yspikes = NULL,
   \item{bottomlinelength}{
     The length of bottom line.  If \code{NA} (the default), the bottom
     line extends to the end ot the spark rectangle.
+}
+  \item{bottomlinex}{
+    The dimensions  of the extended bottom line.
+    If \code{c(NA, NA)} (the default), the extended bottom
+    line is not drawn. You need LaTeX package at
+    least v1.7 for extended bottom line.
 }
   \item{startdotcolor}{
     The color of the dot at the beginning of the spark line.  If
@@ -134,21 +150,33 @@ sparkline(x = NULL, y = NULL, xspikes = NULL, yspikes = NULL,
   Thus all color values must be understandable to LaTeX.  For example,
   you can put in the TeX file
 
-  \preformatted{\definecolor{startdot}{named}{red}}
+  \preformatted{\\definecolor{startdot}{named}{red}}
 
-  and then use it like \code{sparkline(Nile, startdotcolor='startdot')}.
+  and then use it like \code{sparkline(Nile, startdotcolor="startdot")}.
 
   You should use LaTeX command to change sparkline parameters, for
-  example, \preformatted{\setlength\sparklinethickness{0.3pt}}.
+  example,
+  \preformatted{\\setlength\\sparklinethickness{0.3pt}}
 
   The output of \code{sparkline} is also a TeX command, so you want to
-  put it inside \code{Sexpr} or a code chunk 
+  put it inside \code{Sexpr} or a code chunk.  Note that \code{Sweave}
+  use a special processing for \code{Sexpr}, so you need to set
+  \code{output="inlineSweave"} for inline \code{Sweave} output.  Use
+  \code{output="knitr"} for \code{knitr} (both inline and chunks) and
+  \code{Sweave} chunks.  
+
+  The parameters \code{xlim} and \code{ylim} define the mapping between
+  the data and the sparkline rectangle.  If there are data points
+  outside the rectangle, they may overplot the text.  You may set
+  \code{clip} to \code{TRUE} to prevent this.  
 }
 \value{
   The function returns a string executable by TeX, to be used in
-  \preformatted{\Sexpr}, for example
-  \preformatted{Nile level changed over the years: \Sexpr{sparkline(Nile)}}.
+  \code{\\Sexpr}, for example
+  \code{Nile level changed over the years: \\Sexpr{sparkline(Nile)}}.
 }
+\seealso{\code{\link{ltxsparklines-package}},
+  \code{vignette{ltxsparklines}}} 
 \author{
 Boris Veytsman
 }
@@ -156,12 +184,11 @@ Boris Veytsman
 \dontrun{
 sparkline(x=c(1,3,6),
           y=c(5,8,9),
-          startdotcolor='blue',
-          enddotcolor='red')
+          startdotcolor="blue",
+          enddotcolor="red")
 }
 \dontrun{
 sparkline(Nile)
 }
 }
 \keyword{ hplot }
-
