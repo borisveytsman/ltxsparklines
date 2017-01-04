@@ -66,7 +66,9 @@ outputs LaTeX code compatible with LaTeX package \code{sparklines}
     \item{ltxsparklines.na.rm}{Whether to delete \code{NA} lines from
       the sparkline data (\code{TRUE}).}
     \item{ltxsparklines.bottomline}{Whether to add the bottom line
-      (FALSE).} 
+      (FALSE). You need LaTeX
+      \code{sparklines} package at least v1.6 to draw bottom
+      line.} 
     \item{ltxsparklines.bottomlinex}{The dimensions of the extended
       bottom line (by default \code{c(NA, NA)}, which means  no extended
       bottom line). You need LaTeX
@@ -88,7 +90,7 @@ Boris Veytsman
 Maintainer: <borisv@lk.net> 
 }
 \references{
-  Andreas Loeffer and Dan Luecking, Sparklines, 2014,
+  Andreas Loeffer and Dan Luecking, Sparklines, 2016,
   http://www.ctan.org/pkg/sparklines
 }
 \keyword{ package }

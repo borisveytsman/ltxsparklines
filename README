@@ -8,3 +8,4 @@ plot vectors, matrices, data frames, time series (in ts or zoo format).
 License: GPL-2 | GPL-3
 
 CRAN: install.packages('ltxsparklines')
+CRAN URL: https://cran.r-project.org/package=ltxsparklines

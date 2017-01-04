@@ -111,7 +111,9 @@ sparkline(x = NULL, y = NULL, xspikes = NULL, yspikes = NULL,
   \item{bottomline}{
     Whether to draw a bottom line.  By default, \code{FALSE}.  To
     change the default, use 
-    \code{option(ltxsparklines.bottomline=...)}. 
+    \code{option(ltxsparklines.bottomline=...)}.
+    You need LaTeX package at
+    least v1.6 for bottom lines.
 }
   \item{bottomlinelength}{
     The length of bottom line.  If \code{NA} (the default), the bottom
@@ -121,7 +123,7 @@ sparkline(x = NULL, y = NULL, xspikes = NULL, yspikes = NULL,
     The dimensions  of the extended bottom line.
     If \code{c(NA, NA)} (the default), the extended bottom
     line is not drawn. You need LaTeX package at
-    least v1.7 for extended bottom line.
+    least v1.7 for extended bottom lines.
 }
   \item{startdotcolor}{
     The color of the dot at the beginning of the spark line.  If

@@ -3,15 +3,90 @@
 %\VignetteIndexEntry{LaTeX}
 %\VignetteIndexEntry{ltxsparklines}
 \documentclass{article}
-\usepackage{sparklines}
+%%%%
+%%%% 
+%%%% We cannot expect the system to have the latest version of
+%%%% sparklines.sty, so we define here macros we need
+%%%%
+\makeatletter
+\usepackage{pgf}
+\definecolor{sparkrectanglecolor}{gray}{0.9}
+\definecolor{sparkspikecolor}{named}{black}
+\definecolor{sparklinecolor}{named}{black}
+\definecolor{sparkbottomlinecolor}{named}{black}
+\newlength\sparklinethickness
+\newlength\sparkdotwidth
+\newlength\sparkspikewidth
+\newlength\sparkbottomlinethickness
+\newlength\sparklineclipsep
+\setlength\sparklinethickness{0.2pt}
+\setlength\sparkdotwidth{1.2pt}
+\setlength\sparkspikewidth{2pt}
+\setlength\sparkbottomlinethickness{2pt}
+\setlength\sparklineclipsep{2pt}
+\providecommand{\sparklineheight}{1.75}
+\newenvironment{sparkline}[1]{\pgfpicture{0ex}{0ex}{#1
+    ex}{\sparklineheight ex} 
+  \pgfsetlinewidth{\sparklinethickness}
+  \pgfsetxvec{\pgfpoint{#1 ex}{0pt}}
+  \pgfsetyvec{\pgfpoint{0pt}{\sparklineheight ex}}
+} {\pgfstroke \endpgfpicture}
+
+\newenvironment{sparkline*}[1]{\pgfpicture{0ex}{0ex}{#1
+    ex}{\sparklineheight ex}
+  \pgfpathrectanglecorners%
+        {\pgfpoint{-\sparklineclipsep}{-\sparklineclipsep}}%
+        {\pgfpointadd{\pgfpoint{#1 ex}{\sparklineheight ex}}%
+          {\pgfpoint{\sparklineclipsep}{\sparklineclipsep}}}
+  \pgfusepath{clip}
+  \pgfsetlinewidth{\sparklinethickness}
+  \pgfsetxvec{\pgfpoint{#1 ex}{0pt}}
+  \pgfsetyvec{\pgfpoint{0pt}{\sparklineheight ex}}
+} {\pgfstroke \endpgfpicture}
+\def\sparkdot #1 #2 #3 {%
+  {\pgfmoveto{\pgforigin}\color{#3}\pgfcircle[fill]{\pgfxy(#1,#2)}{\sparkdotwidth}}%
+}
+\def\sparkrectangle #1 #2 {%
+   \ifdim #1pt > #2pt
+        \errmessage{The upper corner #2 of rectangle cannot be lower than #1}%
+   \fi
+   {\pgfmoveto{\pgforigin}\color{sparkrectanglecolor}%
+   \pgfrect[fill]{\pgfxy(0, #1)}{\pgfxy(1, #2-#1)}}}%
+\newcommand{\sparkbottomline}[1][1]{\pgfsetlinewidth{\sparkbottomlinethickness}%
+  \color{sparkbottomlinecolor}%
+  \pgfline{\pgfxy(0,0)}{\pgfxy(#1,0)}\color{sparklinecolor}}
+\def\sparkbottomlinex #1 #2 {\pgfsetlinewidth{\sparkbottomlinethickness}%
+  \color{sparkbottomlinecolor}
+  \pgfline{\pgfxy(#1,0)}{\pgfxy(#2,0)}\color{sparklinecolor}}
+\def\spark #1 #2 {%
+  \pgfmoveto{\pgfxy(#1,#2)} %
+  \@SPARK}
+\def\@SPARK#1 #2 {%
+  \pgfsetlinewidth{\sparklinethickness}%
+  \pgfsetstrokecolor{sparklinecolor}%
+  \pgflineto{\pgfxy(#1,#2)} %
+  \@ifnextchar/{\pgfstroke\ignorespaces}{\@SPARK}}
+\def\sparkspike #1 #2 {%
+  {%
+    \pgfmoveto{\pgforigin}%
+     \pgfsetlinewidth{\sparkspikewidth}%
+     \pgfsetstrokecolor{sparkspikecolor}%
+        \pgfmoveto{\pgfxy(#1, 0)}%
+        \pgflineto{\pgfxy(#1, #2)}
+     \pgfusepath{stroke}}%
+}
+\makeatother
+%%%
+%%%
+%%%
 \usepackage{natbib}
 \usepackage[colorlinks]{hyperref}
-\usepackage{booktabs}
+\usepackage{booktabs,tabularx}
 \begin{document}
 \sloppy
 \title{Examples for \texttt{ltxsparklines} package}
 \author{Boris Veytsman}
-\date{January 2, 2017}
+\date{January 4, 2017}
 \maketitle
 \tableofcontents
 \section{Setting up}
@@ -20,7 +95,7 @@
 
 
 The package \textsl{ltxsparklines} uses \LaTeX\ package
-\textsl{sparklines} \citep{Loeffler14} for drawing sparklines in \TeX\
+\textsl{sparklines} \citep{Loeffler16} for drawing sparklines in \TeX\
 documents: probably prepared with \textsl{Sweave} or \textsl{knitr}
 (but you are, of course, may choose other methods to generate \TeX\
 documents).  Accordingly, many parameters that determine how do
@@ -239,7 +314,8 @@ argument \texttt{rectangle=c(min, max)} can be used for this:
 \Sexpr{pr(rect1)} \Sexpr{ev(rect1)}.  
 
 You can show the $x$ axis with the argument \texttt{bottomline=TRUE}:
-\Sexpr{pr(bottomline1)} \Sexpr{ev(bottomline1)}.  
+\Sexpr{pr(bottomline1)} \Sexpr{ev(bottomline1)}.  You need \LaTeX\
+\textsl{sparklines} package of version~1.6 or later for this feature.  
 
 The argument \texttt{bottomlinelength} gives the length of the bottom
 line (in data coordinates) (by default, the line is drawn across the
@@ -321,9 +397,37 @@ result <- paste(result,
 cat(result)
 @ 
 
-
-
 \bibliography{ltxsparklines}
 \bibliographystyle{plainnat}
+
+
+\appendix
+
+\section{\LaTeX\ package versions}
+\label{sec:latex}
+
+The package uses \LaTeX\ \textsl{sparklines}~\cite{Loeffler16} for
+processing.  You need a relatively new version of this package for all
+features to work.  If you cannot upgrade your \LaTeX\ system, try
+dowloading the style file from the package URL and putting it in the
+working directory.
+
+Below is a quick summary of the \textsl{sparklines} versions:
+
+\bigskip
+\noindent
+\begin{tabularx}{\textwidth}{llX}
+  \toprule
+  Version & Date & Features\\
+  \midrule   
+  1.5 & November 21, 2009 & Probably the oldest version that can be
+  expected to work
+  with \textsl{ltxsparklines} (but is \emph{not} guaranteed to
+  work!).\\ 
+  1.6 & October 19, 2014 & Support for \texttt{bottomline}.\\
+  1.7 & December 26, 2016 & Support for clipping,
+  \texttt{bottomlinex}, bug fixes.  This is the supported version.\\
+  \bottomrule
+\end{tabularx}
 
 \end{document}
