@@ -28,7 +28,7 @@ outputs LaTeX code compatible with LaTeX package \code{sparklines}
 
 \section{Package options and setup}{
 
-  Do not forget to add \code{\\usepackage{sparklines}} to the preamble
+  Do not forget to add \code{\\usepackage\{sparklines\}} to the preamble
   of your TeX document.
   
   There are two sets of options for

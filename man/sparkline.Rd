@@ -177,7 +177,7 @@ sparkline(x = NULL, y = NULL, xspikes = NULL, yspikes = NULL,
   \code{\\Sexpr}, for example
   \code{Nile level changed over the years: \\Sexpr{sparkline(Nile)}}.
 
-  Do not forget to add \code{\\usepackage{sparklines}} to the preamble
+  Do not forget to add \code{\\usepackage\{sparklines\}} to the preamble
   of your TeX document.
 }
 \seealso{\code{\link{ltxsparklines-package}},
