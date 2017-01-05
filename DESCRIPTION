@@ -11,6 +11,8 @@ Description: Sparklines are small plots (about one line of text high),
   (http://www.ctan.org/pkg/sparklines).  It can work with Sweave or
   knitr or other engines that produce TeX.  The package can be used to
   plot vectors, matrices, data frames, time series (in ts or zoo format).
+  Do not forget to add \usepackage{sparklines} to the preamble of your
+  TeX document.
 Suggests: zoo  
 License: GPL-2 | GPL-3
 URL: https://github.com/borisveytsman/ltxsparklines

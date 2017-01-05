@@ -5,8 +5,12 @@
 \documentclass{article}
 %%%%
 %%%% 
-%%%% We cannot expect the system to have the latest version of
-%%%% sparklines.sty, so we define here macros we need
+%%%% The user should put here \usepackage{sparklines}
+%%%%
+%%%% However, we want this file to be compiled on CRAN machines.  We
+%%%% cannot expect CRAN systema to have the latest version of
+%%%% sparklines.sty, so we define here macros we need INSTEAD of
+%%%% saying just \usepackage{sparklines}.
 %%%%
 \makeatletter
 \usepackage{pgf}
@@ -77,7 +81,10 @@
 }
 \makeatother
 %%%
+%%% END of macros.
 %%%
+%%% Again, please do not copy these macros.  Use
+%%% \usepackage{sparklines} instead!
 %%%
 \usepackage{natbib}
 \usepackage[colorlinks]{hyperref}
@@ -98,12 +105,12 @@ The package \textsl{ltxsparklines} uses \LaTeX\ package
 \textsl{sparklines} \citep{Loeffler16} for drawing sparklines in \TeX\
 documents: probably prepared with \textsl{Sweave} or \textsl{knitr}
 (but you are, of course, may choose other methods to generate \TeX\
-documents).  Accordingly, many parameters that determine how do
-sparklines look are defined in the \TeX\ file rather than in
-\textsl{R}.  
+documents).  Accordingly, put in the preamble of your \LaTeX\ file
+\verb|\usepackage{sparklines}|.  
 
-Here are some global parameters with the values chosen for this
-document:
+Many parameters that determine how do sparklines look are defined in
+the \TeX\ file rather than in \textsl{R}.  Here are some global
+parameters with the values chosen for this document:
 \begin{verbatim}
 % The height of the sparklines in ex units
 \renewcommand\sparklineheight{1.75} 

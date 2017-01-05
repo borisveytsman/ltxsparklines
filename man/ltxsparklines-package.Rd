@@ -26,7 +26,12 @@ outputs LaTeX code compatible with LaTeX package \code{sparklines}
 (Andreas Loeffer and Dan Luecking, http://www.ctan.org/pkg/sparklines). 
 }
 
-\section{Package options and setup}{ There are two sets of options for
+\section{Package options and setup}{
+
+  Do not forget to add \code{\\usepackage{sparklines}} to the preamble
+  of your TeX document.
+  
+  There are two sets of options for
   sparklines in LaTeX: those which are set from TeX, and those which are
   set from R.  The TeX options should be set with \code{\\renewcommand},
   \code{\\definecolor} or \code{\\setlength}, for example,

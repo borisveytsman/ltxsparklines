@@ -176,6 +176,9 @@ sparkline(x = NULL, y = NULL, xspikes = NULL, yspikes = NULL,
   The function returns a string executable by TeX, to be used in
   \code{\\Sexpr}, for example
   \code{Nile level changed over the years: \\Sexpr{sparkline(Nile)}}.
+
+  Do not forget to add \code{\\usepackage{sparklines}} to the preamble
+  of your TeX document.
 }
 \seealso{\code{\link{ltxsparklines-package}},
   \code{vignette{ltxsparklines}}} 
