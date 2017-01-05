@@ -1,14 +1,14 @@
 Package: ltxsparklines
 Type: Package
 Title: Lightweight Sparklines for a LaTeX Document
-Version: 1.1.1
+Version: 1.1.2
 Authors@R: c(person("Boris", "Veytsman", role = c("aut", "cre"),
                      email = "borisv@lk.net"))
-Date: 2017-01-04
+Date: 2017-01-05
 Description: Sparklines are small plots (about one line of text high),
   made popular by Edward Tufte.  This package is the interface from R
   to the LaTeX package sparklines by Andreas Loeffer and Dan Luecking
-  (http://www.ctan.org/pkg/sparklines).  It can work with Sweave or
+  (<http://www.ctan.org/pkg/sparklines>).  It can work with Sweave or
   knitr or other engines that produce TeX.  The package can be used to
   plot vectors, matrices, data frames, time series (in ts or zoo format).
 Suggests: zoo  
