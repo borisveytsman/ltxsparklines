@@ -245,7 +245,7 @@ sparkline <- function(x=NULL, y=NULL,
                          "]\n");
     }
     if(!is.null(bottomlinex) && !is.na(bottomlinex[1]) &&
-       !is.na(bottomlinex[x])) {
+       !is.na(bottomlinex[2])) {
         result <- paste0(result,"\\sparkbottomlinex",
                          bottomlinex[1], " ",
                          bottomlinex[2],
